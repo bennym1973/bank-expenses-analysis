@@ -1,6 +1,22 @@
+
 import streamlit as st
 import pandas as pd
 import matplotlib.pyplot as plt
+
+# הגדרת סיסמה לשימוש באפליקציה
+PASSWORD = "0544752357"  # שנה את זה לסיסמה שלך
+
+# יצירת תיבת קלט לסיסמה
+st.title("🔒 התחברות לאפליקציה")
+
+password_input = st.text_input("📌 הזן סיסמה:", type="password")
+
+if password_input != PASSWORD:
+    st.error("❌ סיסמה שגויה! נסה שוב.")
+    st.stop()  # מפסיק את הרצת האפליקציה אם הסיסמה שגויה
+
+# אם הסיסמה נכונה, מציגים את האפליקציה הרגילה
+st.success("✅ סיסמה נכונה! ברוך הבא לאפליקציה.")
 
 # קריאת קובץ האקסל עם הנתונים
 file_path = "הכנסות והוצאות אבא ממאי ועד היום.xlsx"
