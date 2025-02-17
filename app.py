@@ -168,31 +168,31 @@ else:  # הכנסות מול הוצאות
     bars_expense = expense_data_plot.plot(kind="bar", ax=ax, color='red', width=0.4, position=0, label=reverse_text("הוצאות"))
     
     # הוספת ערכים על כל עמודה (הכנסות)
-    for bar in ax.containers[0]:  # מתייחס לעמודות של ההכנסות
+    for bar in ax.containers[0]:  # הכנסות
         height = bar.get_height()
         if height != 0:
             ax.text(
                 bar.get_x() + bar.get_width() / 2,  
-                height,  
+                height + (abs(height) * 0.02),  # הוספת מרווח קטן למעלה
                 f'{height:,.0f}₪',  
                 ha='center',  
                 va='bottom',  
-                fontsize=8, 
+                fontsize=10, 
                 fontweight='bold',
                 color='black'
             )
 
     # הוספת ערכים על כל עמודה (הוצאות)
-    for bar in ax.containers[1]:  # מתייחס לעמודות של ההוצאות
+    for bar in ax.containers[1]:  # הוצאות
         height = bar.get_height()
         if height != 0:
             ax.text(
                 bar.get_x() + bar.get_width() / 2,  
-                height,  
+                height - (abs(height) * 0.08),  # הזזת הטקסט מעט למטה
                 f'{height:,.0f}₪',  
                 ha='center',  
-                va='bottom',  
-                fontsize=8, 
+                va='top',  
+                fontsize=10, 
                 fontweight='bold',
                 color='black'
             )
@@ -203,6 +203,7 @@ else:  # הכנסות מול הוצאות
     ax.legend()
 
     st.pyplot(fig)
+
 
 
 
