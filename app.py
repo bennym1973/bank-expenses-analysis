@@ -137,7 +137,7 @@ if option_plot == 'יתרה הכנסות הוצאות':
                 f'{height:,.0f}₪',  
                 ha='center',  
                 va='bottom' if height > 0 else 'top',  
-                fontsize=10, 
+                fontsize=7, 
                 fontweight='bold'
             )
 
