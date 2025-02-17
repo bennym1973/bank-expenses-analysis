@@ -39,9 +39,7 @@ monthly_summary = monthly_summary.fillna(0)
 income_data = monthly_summary[monthly_summary['זכות'] > 0].pivot(index='הפעולה', columns='שנה-חודש', values='זכות').fillna(0)
 expense_data = monthly_summary[monthly_summary['חובה'] > 0].pivot(index='הפעולה', columns='שנה-חודש', values='חובה').fillna(0)
 
-# הוספת שורות סכום
-income_data.loc['סה"כ הכנסות'] = income_data.sum()
-expense_data.loc['סה"כ הוצאות'] = expense_data.sum()
+
 ###########################################################################
 # סינון עסקאות חיסכון
 keywords_savings = ["זכוי מת. חסכון","פרעון פקדון","הפקדה לחסכון","הפקדה לחסכון",'ני"ע-קניה']  # ניתן להוסיף עוד מילים רלוונטיות
@@ -81,6 +79,9 @@ final_table = pd.concat([
 
 
 # old
+# הוספת שורות סכום
+# income_data.loc['סה"כ הכנסות'] = income_data.sum()
+# expense_data.loc['סה"כ הוצאות'] = expense_data.sum()
 # חישוב יתרה חודשית
 # balance = income_data.loc['סה"כ הכנסות'] - expense_data.loc['סה"כ הוצאות']
 # balance.name = 'יתרה חודשית'
