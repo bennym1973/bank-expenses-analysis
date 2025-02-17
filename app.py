@@ -3,6 +3,11 @@ import streamlit as st
 import pandas as pd
 import matplotlib.pyplot as plt
 
+# פונקציה להצגת פירוט הכנסות/הוצאות למשתמש
+def reverse_text(text):
+    if text is not None:
+        return text[::-1]
+
 # הגדרת סיסמה לשימוש באפליקציה
 PASSWORD = "0544752357"  # שנה את זה לסיסמה שלך
 
@@ -100,9 +105,10 @@ st.dataframe(final_table)
 st.subheader("📉 גרף הוצאות והכנסות לפי חודש")
 
 fig, ax = plt.subplots()
-balance.plot(kind="bar", ax=ax, color=['green' if x >= 0 else 'red' for x in balance])
+balance_no_savings.plot(kind="bar", ax=ax, color=['green' if x >= 0 else 'red' for x in balance_no_savings])
+ax.set_xlabel(reverse_text('שנה-חודש'))
 ax.set_ylabel("₪")
-ax.set_title("יתרה חודשית")
+ax.set_title(reverse_text("ללא חיסכונות - יתרה חודשית"))
 st.pyplot(fig)
 
 # בחירת חודש להצגת פירוט עסקאות
