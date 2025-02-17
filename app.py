@@ -147,19 +147,63 @@ if option_plot == 'יתרה הכנסות הוצאות':
 
     st.pyplot(fig)
 
+# else:  # הכנסות מול הוצאות
+#     fig, ax = plt.subplots()
+    
+#     # גרף עמודות להכנסות והוצאות
+#     income_data_plot.plot(kind="bar", ax=ax, color='green', position=1, width=0.4, label=reverse_text("הכנסות"))
+#     expense_data_plot.plot(kind="bar", ax=ax, color='red', position=0, width=0.4, label=reverse_text("הוצאות"))
+    
+#     ax.set_xlabel(reverse_text('שנה-חודש'))
+#     ax.set_ylabel("₪")
+#     ax.set_title(reverse_text(f"{title_suffix} - הכנסות מול הוצאות"))
+#     ax.legend()
+
+#     st.pyplot(fig)
 else:  # הכנסות מול הוצאות
     fig, ax = plt.subplots()
     
     # גרף עמודות להכנסות והוצאות
-    income_data_plot.plot(kind="bar", ax=ax, color='green', position=1, width=0.4, label=reverse_text("הכנסות"))
-    expense_data_plot.plot(kind="bar", ax=ax, color='red', position=0, width=0.4, label=reverse_text("הוצאות"))
+    bars_income = income_data_plot.plot(kind="bar", ax=ax, color='green', width=0.4, position=1, label=reverse_text("הכנסות"))
+    bars_expense = expense_data_plot.plot(kind="bar", ax=ax, color='red', width=0.4, position=0, label=reverse_text("הוצאות"))
     
+    # הוספת ערכים על כל עמודה (הכנסות)
+    for bar in ax.containers[0]:  # מתייחס לעמודות של ההכנסות
+        height = bar.get_height()
+        if height != 0:
+            ax.text(
+                bar.get_x() + bar.get_width() / 2,  
+                height,  
+                f'{height:,.0f}₪',  
+                ha='center',  
+                va='bottom',  
+                fontsize=10, 
+                fontweight='bold',
+                color='black'
+            )
+
+    # הוספת ערכים על כל עמודה (הוצאות)
+    for bar in ax.containers[1]:  # מתייחס לעמודות של ההוצאות
+        height = bar.get_height()
+        if height != 0:
+            ax.text(
+                bar.get_x() + bar.get_width() / 2,  
+                height,  
+                f'{height:,.0f}₪',  
+                ha='center',  
+                va='bottom',  
+                fontsize=10, 
+                fontweight='bold',
+                color='black'
+            )
+
     ax.set_xlabel(reverse_text('שנה-חודש'))
     ax.set_ylabel("₪")
     ax.set_title(reverse_text(f"{title_suffix} - הכנסות מול הוצאות"))
     ax.legend()
 
     st.pyplot(fig)
+
 
 
 if False:
