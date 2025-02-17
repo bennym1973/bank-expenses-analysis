@@ -192,7 +192,7 @@ else:  # הכנסות מול הוצאות
                 f'{height:,.0f}₪',  
                 ha='center',  
                 va='bottom',  
-                fontsize=10, 
+                fontsize=8, 
                 fontweight='bold',
                 color='black'
             )
