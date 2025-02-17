@@ -112,20 +112,20 @@ include_savings = st.checkbox("כולל חיסכונות", value=True)
 
 # נתוני ההכנסות והוצאות (יש להתאים לנתונים שלך)
 if include_savings:
-    balance_data = balance  # נתונים כולל חיסכונות
-    income_data = income_data.loc['סה"כ הכנסות']#income_with_savings
-    expense_data = expense_data.loc['סה"כ הוצאות']
+    balance_data_plot = balance  # נתונים כולל חיסכונות
+    income_data_plot = income_data.loc['סה"כ הכנסות']#income_with_savings
+    expense_data_plot = expense_data.loc['סה"כ הוצאות']
     title_suffix = "כולל חיסכונות"
 else:
-    balance_data = balance_no_savings  # נתונים ללא חיסכונות
-    income_data = income_without_savings
-    expense_data = expense_without_savings
+    balance_data_plot = balance_no_savings  # נתונים ללא חיסכונות
+    income_data_plot = income_without_savings
+    expense_data_plot = expense_without_savings
     title_suffix = "ללא חיסכונות"
 
 fig, ax = plt.subplots()
 
 if option_plot == 'יתרה הכנסות הוצאות':
-    bars = balance_data.plot(kind="bar", ax=ax, color=['green' if x >= 0 else 'red' for x in balance_data])
+    bars = balance_data_plot.plot(kind="bar", ax=ax, color=['green' if x >= 0 else 'red' for x in balance_data_plot])
 
     # הוספת ערכים על כל עמודה
     for bar in ax.patches:
@@ -151,8 +151,8 @@ else:  # הכנסות מול הוצאות
     fig, ax = plt.subplots()
     
     # גרף עמודות להכנסות והוצאות
-    income_data.plot(kind="bar", ax=ax, color='green', position=1, width=0.4, label=reverse_text("הכנסות"))
-    expense_data.plot(kind="bar", ax=ax, color='red', position=0, width=0.4, label=reverse_text("הוצאות"))
+    income_data_plot.plot(kind="bar", ax=ax, color='green', position=1, width=0.4, label=reverse_text("הכנסות"))
+    expense_data_plot.plot(kind="bar", ax=ax, color='red', position=0, width=0.4, label=reverse_text("הוצאות"))
     
     ax.set_xlabel(reverse_text('שנה-חודש'))
     ax.set_ylabel("₪")
