@@ -105,11 +105,29 @@ st.dataframe(final_table)
 st.subheader("📉 גרף הוצאות והכנסות לפי חודש")
 
 fig, ax = plt.subplots()
-balance_no_savings.plot(kind="bar", ax=ax, color=['green' if x >= 0 else 'red' for x in balance_no_savings])
+bars = balance_no_savings.plot(kind="bar", ax=ax, color=['green' if x >= 0 else 'red' for x in balance_no_savings])
+
+# הוספת ערכים על כל עמודה
+for bar in ax.patches:
+    height = bar.get_height()  # קבלת גובה העמודה (הערך)
+    if height != 0:  # להימנע מהצגת 0
+        ax.text(
+            bar.get_x() + bar.get_width() / 2,  # מיקום X (אמצע העמודה)
+            height,  # מיקום Y (גובה הערך)
+            f'{height:,.0f}₪',  # הצגת הערך בפורמט שקל עם פסיקים
+            ha='center',  # יישור אופקי למרכז
+            va='bottom' if height > 0 else 'top',  # אם שלילי - יופיע מעל העמודה
+            fontsize=10, 
+            fontweight='bold'
+        )
+
+# כותרות וצירים
 ax.set_xlabel(reverse_text('שנה-חודש'))
 ax.set_ylabel("₪")
 ax.set_title(reverse_text("ללא חיסכונות - יתרה חודשית"))
+
 st.pyplot(fig)
+
 
 # בחירת חודש להצגת פירוט עסקאות
 st.subheader("🔍 בחר חודש להצגת פירוט העסקאות")
