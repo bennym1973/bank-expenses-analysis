@@ -176,8 +176,8 @@ else:  # הכנסות מול הוצאות
                 height + (abs(height) * 0.05),  # הזזת הטקסט מעט למעלה
                 f'{height:,.0f}₪',  
                 ha='center',  
-                va='bottom',  
-                fontsize=10, 
+                va='top',  
+                fontsize=8, 
                 fontweight='bold',
                 color='black',
                 rotation=90  # סיבוב אנכי של הטקסט
@@ -193,7 +193,7 @@ else:  # הכנסות מול הוצאות
                 f'{height:,.0f}₪',  
                 ha='center',  
                 va='top',  
-                fontsize=10, 
+                fontsize=8, 
                 fontweight='bold',
                 color='black',
                 rotation=90  # סיבוב אנכי של הטקסט
