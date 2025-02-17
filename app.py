@@ -180,7 +180,7 @@ else:  # הכנסות מול הוצאות
                 fontsize=8, 
                 fontweight='bold',
                 color='black',
-                rotation=90  # סיבוב אנכי של הטקסט
+                # rotation=90  # סיבוב אנכי של הטקסט
             )
 
     # הוספת ערכים על כל עמודה (הוצאות)
@@ -196,7 +196,7 @@ else:  # הכנסות מול הוצאות
                 fontsize=8, 
                 fontweight='bold',
                 color='black',
-                rotation=90  # סיבוב אנכי של הטקסט
+                # rotation=90  # סיבוב אנכי של הטקסט
             )
 
     ax.set_xlabel(reverse_text('שנה-חודש'))
