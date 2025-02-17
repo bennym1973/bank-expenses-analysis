@@ -101,32 +101,98 @@ st.title("📊 ניתוח הוצאות והכנסות")
 st.subheader("📌 סיכום פיננסי חודשי")
 st.dataframe(final_table)
 
-# גרף ויזואלי של הכנסות והוצאות לפי חודש
-st.subheader("📉 גרף הוצאות והכנסות לפי חודש")
+import streamlit as st
+import matplotlib.pyplot as plt
+
+st.subheader("📉 גרף הוצאות והכנסות לפי חודש - בחר סוג פירוט")
+
+# בחירת סוג פירוט
+option_plot = st.radio("בחר סוג נתונים:", ['יתרה הכנסות הוצאות', 'הכנסות מול הוצאות'])
+include_savings = st.checkbox("כולל חיסכונות", value=True)
+
+# נתוני ההכנסות והוצאות (יש להתאים לנתונים שלך)
+if include_savings:
+    balance_data = balance  # נתונים כולל חיסכונות
+    income_data = income_data.loc['סה"כ הכנסות']#income_with_savings
+    expense_data = expense_data.loc['סה"כ הוצאות']
+    title_suffix = "כולל חיסכונות"
+else:
+    balance_data = balance_no_savings  # נתונים ללא חיסכונות
+    income_data = income_without_savings
+    expense_data = expense_without_savings
+    title_suffix = "ללא חיסכונות"
 
 fig, ax = plt.subplots()
-bars = balance_no_savings.plot(kind="bar", ax=ax, color=['green' if x >= 0 else 'red' for x in balance_no_savings])
 
-# הוספת ערכים על כל עמודה
-for bar in ax.patches:
-    height = bar.get_height()  # קבלת גובה העמודה (הערך)
-    if height != 0:  # להימנע מהצגת 0
-        ax.text(
-            bar.get_x() + bar.get_width() / 2,  # מיקום X (אמצע העמודה)
-            height,  # מיקום Y (גובה הערך)
-            f'{height:,.0f}₪',  # הצגת הערך בפורמט שקל עם פסיקים
-            ha='center',  # יישור אופקי למרכז
-            va='bottom' if height > 0 else 'top',  # אם שלילי - יופיע מעל העמודה
-            fontsize=10, 
-            fontweight='bold'
-        )
+if option_plot == 'יתרה הכנסות הוצאות':
+    bars = balance_data.plot(kind="bar", ax=ax, color=['green' if x >= 0 else 'red' for x in balance_data])
 
-# כותרות וצירים
-ax.set_xlabel(reverse_text('שנה-חודש'))
-ax.set_ylabel("₪")
-ax.set_title(reverse_text("ללא חיסכונות - יתרה חודשית"))
+    # הוספת ערכים על כל עמודה
+    for bar in ax.patches:
+        height = bar.get_height()  
+        if height != 0:  
+            ax.text(
+                bar.get_x() + bar.get_width() / 2,  
+                height,  
+                f'{height:,.0f}₪',  
+                ha='center',  
+                va='bottom' if height > 0 else 'top',  
+                fontsize=10, 
+                fontweight='bold'
+            )
 
-st.pyplot(fig)
+    ax.set_xlabel(reverse_text('שנה-חודש'))
+    ax.set_ylabel("₪")
+    ax.set_title(reverse_text(f"{title_suffix} - יתרה חודשית"))
+
+    st.pyplot(fig)
+
+else:  # הכנסות מול הוצאות
+    fig, ax = plt.subplots()
+    
+    # גרף עמודות להכנסות והוצאות
+    income_data.plot(kind="bar", ax=ax, color='green', position=1, width=0.4, label=reverse_text("הכנסות"))
+    expense_data.plot(kind="bar", ax=ax, color='red', position=0, width=0.4, label=reverse_text("הוצאות"))
+    
+    ax.set_xlabel(reverse_text('שנה-חודש'))
+    ax.set_ylabel("₪")
+    ax.set_title(reverse_text(f"{title_suffix} - הכנסות מול הוצאות"))
+    ax.legend()
+
+    st.pyplot(fig)
+
+
+if False:
+    # גרף ויזואלי של הכנסות והוצאות לפי חודש
+    st.subheader("📉 גרף הוצאות והכנסות לפי חודש")
+    #####
+
+    fig, ax = plt.subplots()
+
+    bars = balance_no_savings.plot(kind="bar", ax=ax, color=['green' if x >= 0 else 'red' for x in balance_no_savings])
+
+    # הוספת ערכים על כל עמודה
+    for bar in ax.patches:
+        height = bar.get_height()  # קבלת גובה העמודה (הערך)
+        if height != 0:  # להימנע מהצגת 0
+            ax.text(
+                bar.get_x() + bar.get_width() / 2,  # מיקום X (אמצע העמודה)
+                height,  # מיקום Y (גובה הערך)
+                f'{height:,.0f}₪',  # הצגת הערך בפורמט שקל עם פסיקים
+                ha='center',  # יישור אופקי למרכז
+                va='bottom' if height > 0 else 'top',  # אם שלילי - יופיע מעל העמודה
+                fontsize=10, 
+                fontweight='bold'
+            )
+
+    # כותרות וצירים
+    ax.set_xlabel(reverse_text('שנה-חודש'))
+    ax.set_ylabel("₪")
+    ax.set_title(reverse_text("ללא חיסכונות - יתרה חודשית"))
+
+    st.pyplot(fig)
+
+
 
 
 # בחירת חודש להצגת פירוט עסקאות
