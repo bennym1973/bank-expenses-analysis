@@ -173,13 +173,14 @@ else:  # הכנסות מול הוצאות
         if height != 0:
             ax.text(
                 bar.get_x() + bar.get_width() / 2,  
-                height + (abs(height) * 0.02),  # הוספת מרווח קטן למעלה
+                height + (abs(height) * 0.05),  # הזזת הטקסט מעט למעלה
                 f'{height:,.0f}₪',  
                 ha='center',  
                 va='bottom',  
                 fontsize=10, 
                 fontweight='bold',
-                color='black'
+                color='black',
+                rotation=90  # סיבוב אנכי של הטקסט
             )
 
     # הוספת ערכים על כל עמודה (הוצאות)
@@ -188,13 +189,14 @@ else:  # הכנסות מול הוצאות
         if height != 0:
             ax.text(
                 bar.get_x() + bar.get_width() / 2,  
-                height - (abs(height) * 0.08),  # הזזת הטקסט מעט למטה
+                height - (abs(height) * 0.05),  # הזזת הטקסט מעט למטה
                 f'{height:,.0f}₪',  
                 ha='center',  
                 va='top',  
                 fontsize=10, 
                 fontweight='bold',
-                color='black'
+                color='black',
+                rotation=90  # סיבוב אנכי של הטקסט
             )
 
     ax.set_xlabel(reverse_text('שנה-חודש'))
@@ -203,6 +205,7 @@ else:  # הכנסות מול הוצאות
     ax.legend()
 
     st.pyplot(fig)
+
 
 
 
