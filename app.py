@@ -101,17 +101,23 @@ else:
 
 # פירוט עסקאות לפי חודשים ופעולה
 st.subheader("🔍 בחר חודש להצגת פירוט העסקאות")
-months = list(income_data.columns)
+months_only = list(income_data.columns)
+months = ["הכל"] + months_only
 selected_months = st.multiselect("📅 בחר חודש או חודשים:", months, default=[months[-1]])
+
+if "הכל" in selected_months:
+    filtered_months = months_only
+else:
+    filtered_months = selected_months
 
 st.subheader("📂 בחר סוג פירוט")
 option = st.radio("בחר סוג נתונים:", ['הכנסות', 'הוצאות'])
 
-if selected_months:
+if filtered_months:
     if option == 'הכנסות':
-        data = income_data[selected_months].dropna(how='all')
+        data = income_data[filtered_months].dropna(how='all')
     else:
-        data = expense_data[selected_months].dropna(how='all')
+        data = expense_data[filtered_months].dropna(how='all')
 
     st.write(f"📃 רשימת {option} עבור חודשים נבחרים:")
     st.dataframe(data)
@@ -120,7 +126,7 @@ if selected_months:
     selected_action = st.selectbox("🔽 בחר פעולה:", data.index)
 
     transaction_details = summary_df[
-        (summary_df['שנה-חודש'].isin(selected_months)) &
+        (summary_df['שנה-חודש'].isin(filtered_months)) &
         (summary_df['הפעולה'] == selected_action)
     ]
 
@@ -129,10 +135,10 @@ if selected_months:
     else:
         transaction_details_display = transaction_details[['שנה-חודש', 'הפעולה', 'חובה', 'פרטים']]
 
-    if len(selected_months) == 1:
-        month_text = f"בחודש {selected_months[0]}"
+    if len(filtered_months) == 1:
+        month_text = f"בחודש {filtered_months[0]}"
     else:
-        month_text = f"בחודשים: {', '.join(selected_months)}"
+        month_text = f"בחודשים: {', '.join(filtered_months)}"
 
     st.write(f"📜 פירוט עסקאות עבור '{selected_action}' {month_text}:")
     st.dataframe(transaction_details_display)
