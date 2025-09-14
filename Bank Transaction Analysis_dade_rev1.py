@@ -41,7 +41,9 @@ if not Debug:
 
 # פונקציה להצגת פירוט הכנסות/הוצאות למשתמש
 def reverse_text(text):
-    return text[::-1]
+    if text is not None:
+        return text[::-1]
+
 
 # קריאת קובץ האקסל
 file_path = "הכנסות והוצאות אבא ממאי ועד היום.xlsx"
@@ -70,16 +72,57 @@ monthly_summary = monthly_summary.fillna(0)
 income_data = monthly_summary[monthly_summary['זכות'] > 0].pivot(index='הפעולה', columns='שנה-חודש', values='זכות').fillna(0)
 expense_data = monthly_summary[monthly_summary['חובה'] > 0].pivot(index='הפעולה', columns='שנה-חודש', values='חובה').fillna(0)
 
-# הוספת שורת סכום עבור כל קבוצה
-income_data.loc['סה"כ הכנסות'] = income_data.sum()
-expense_data.loc['סה"כ הוצאות'] = expense_data.sum()
+# # הוספת שורת סכום עבור כל קבוצה
+# income_data.loc['סה"כ הכנסות'] = income_data.sum()
+# expense_data.loc['סה"כ הוצאות'] = expense_data.sum()
 
 # חישוב ההפרש בין סה"כ הכנסות להוצאות
+# balance = income_data.loc['סה"כ הכנסות'] - expense_data.loc['סה"כ הוצאות']
+# balance.name = 'הפרש חודשי'
+
+# חיבור הכל לטבלה אחת
+# final_table = pd.concat([income_data, expense_data, balance.to_frame().T])
+
+###
+# סינון עסקאות חיסכון
+keywords_savings = ["זכוי מת. חסכון","פרעון פקדון","הפקדה לחסכון","הפקדה לחסכון",'ני"ע-קניה']  # ניתן להוסיף עוד מילים רלוונטיות
+
+# **שלב 1: הוספת שורות סיכום רגילות**
+income_data.loc['סה"כ הכנסות'] = income_data.sum(numeric_only=True)
+expense_data.loc['סה"כ הוצאות'] = expense_data.sum(numeric_only=True)
+
+# **שלב 2: רק עכשיו לבצע סינון חיסכונות**
+savings_income_rows = income_data.loc[income_data.index.str.contains('|'.join(keywords_savings), na=False)]
+savings_expense_rows = expense_data.loc[expense_data.index.str.contains('|'.join(keywords_savings), na=False)]
+
+# **שלב 3: חישוב סה"כ הכנסות ללא חיסכונות**
+income_without_savings = income_data.loc['סה"כ הכנסות'] - savings_income_rows.sum(numeric_only=True)
+income_without_savings.name = 'סה"כ הכנסות ללא חיסכונות'
+
+# **שלב 4: חישוב סה"כ הוצאות ללא חיסכונות**
+expense_without_savings = expense_data.loc['סה"כ הוצאות'] - savings_expense_rows.sum(numeric_only=True)
+expense_without_savings.name = 'סה"כ הוצאות ללא חיסכונות'
+
+# **שלב 5: חישוב הפרשים**
 balance = income_data.loc['סה"כ הכנסות'] - expense_data.loc['סה"כ הוצאות']
 balance.name = 'הפרש חודשי'
 
-# חיבור הכל לטבלה אחת
-final_table = pd.concat([income_data, expense_data, balance.to_frame().T])
+balance_no_savings = income_without_savings - expense_without_savings
+balance_no_savings.name = 'הפרש חודשי ללא חיסכונות'
+
+# **שלב 6: הוספת כל הנתונים לטבלה הסופית**
+final_table = pd.concat([
+    income_data, 
+    pd.DataFrame(income_without_savings).T,  
+    expense_data, 
+    pd.DataFrame(expense_without_savings).T, 
+    pd.DataFrame(balance).T,  
+    pd.DataFrame(balance_no_savings).T  
+])
+
+
+
+###
 
 # שמירת הנתונים לטבלה מסודרת בקובץ אקסל
 excel_file = "monthly_financial_summary.xlsx"
@@ -282,8 +325,12 @@ def display_detailed_transactions():
         
         print(transaction_details_display)
 
+
 while True:
     display_detailed_transactions()
+    exit_choice = input(f"{reverse_text('הזן 0 ליציאה או כל מספר אחר לבדיקת נתונים נוספים')}: ")
+    if exit_choice == '0':
+        break
 
 
 
