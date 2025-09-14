@@ -32,7 +32,8 @@ monthly_summary = monthly_summary.fillna(0)
 income_data = monthly_summary[monthly_summary['זכות'] > 0].pivot(index='הפעולה', columns='שנה-חודש', values='זכות').fillna(0)
 expense_data = monthly_summary[monthly_summary['חובה'] > 0].pivot(index='הפעולה', columns='שנה-חודש', values='חובה').fillna(0)
 
-keywords_savings = ["זכוי מת. חסכון","פרעון פקדון","הפקדה לחסכון",'ני"ע-קניה']
+# keywords_savings = ["זכוי מת. חסכון","פרעון פקדון","הפקדה לחסכון",'ני"ע-קניה']
+keywords_savings = ["זכוי מת. חסכון","פרעון פקדון","הפקדה לחסכון",'ני"ע-קניה', 'הו"ק פקדון']
 
 income_data.loc['סה"כ הכנסות'] = income_data.sum(numeric_only=True)
 expense_data.loc['סה"כ הוצאות'] = expense_data.sum(numeric_only=True)
