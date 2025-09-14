@@ -62,8 +62,8 @@ final_table = pd.concat([
     pd.DataFrame(balance_no_savings).T  
 ])
 
-# st.title("📊 ניתוח הוצאות והכנסות")
-st.title(f"📊 ניתוח הוצאות והכנסות ({APP_VERSION})")
+st.title("📊 ניתוח הוצאות והכנסות")
+# st.title(f"📊 ניתוח הוצאות והכנסות ({APP_VERSION})")
 st.subheader("📌 סיכום פיננסי חודשי")
 st.dataframe(final_table)
 
